@@ -8,8 +8,8 @@ export const dagenoApiDescription: INodeTypeDescription = {
 	icon: 'file:dageno.svg',
 	group: ['transform'],
 	version: 1,
-	subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
-	description: 'Consume Dageno API',
+	subtitle: '={{$parameter["resource"] + ": " + $parameter["operation"]}}',
+	description: 'Interact with Dageno API for GEO analysis and insights',
 	defaults: {
 		name: 'Dageno API',
 	},
@@ -55,7 +55,7 @@ export const dagenoApiDescription: INodeTypeDescription = {
 			],
 			default: 'brand',
 		},
-		// Operations for Brand
+		// Operations
 		{
 			displayName: 'Operation',
 			name: 'operation',
@@ -63,22 +63,18 @@ export const dagenoApiDescription: INodeTypeDescription = {
 			noDataExpression: true,
 			displayOptions: {
 				show: {
-					resource: [
-						'brand',
-					],
+					resource: ['brand'],
 				},
 			},
 			options: [
 				{
-					name: 'Get',
+					name: 'Get Brand Info',
 					value: 'get',
-					description: 'Get brand base information',
-					action: 'Get brand information',
+					action: 'Get brand base information',
 				},
 			],
 			default: 'get',
 		},
-		// Operations for GEO Analysis
 		{
 			displayName: 'Operation',
 			name: 'operation',
@@ -86,90 +82,47 @@ export const dagenoApiDescription: INodeTypeDescription = {
 			noDataExpression: true,
 			displayOptions: {
 				show: {
-					resource: [
-						'geoAnalysis',
-					],
+					resource: ['geoAnalysis'],
 				},
 			},
 			options: [
 				{
-					name: 'Execute',
+					name: 'Execute Query',
 					value: 'execute',
-					description: 'Execute GEO analysis query',
-					action: 'Execute GEO analysis',
+					action: 'Execute GEO analysis query',
 				},
 			],
 			default: 'execute',
 		},
 		{
-			displayName: 'Body (JSON)',
-			name: 'body',
-			type: 'string',
-			required: true,
-			displayOptions: {
-				show: {
-					resource: [
-						'geoAnalysis',
-					],
-					operation: [
-						'execute',
-					],
-				},
-			},
-			default: '{}',
-			description: 'The JSON body to send for GEO analysis',
-		},
-		// Operations for Opportunities
-		{
 			displayName: 'Operation',
 			name: 'operation',
 			type: 'options',
 			noDataExpression: true,
 			displayOptions: {
 				show: {
-					resource: [
-						'opportunities',
-					],
+					resource: ['opportunities'],
 				},
 			},
 			options: [
 				{
-					name: 'List',
-					value: 'list',
-					description: 'List opportunities',
-					action: 'List opportunities',
-				},
-			],
-			default: 'list',
-		},
-		{
-			displayName: 'Type',
-			name: 'type',
-			type: 'options',
-			displayOptions: {
-				show: {
-					resource: [
-						'opportunities',
-					],
-				},
-			},
-			options: [
-				{
-					name: 'Content',
+					name: 'List Content Opportunities',
 					value: 'content',
+					action: 'List content opportunities',
 				},
 				{
-					name: 'Backlink',
+					name: 'List Backlink Opportunities',
 					value: 'backlink',
+					action: 'List backlink opportunities',
 				},
 				{
-					name: 'Community',
+					name: 'List Community Opportunities',
 					value: 'community',
+					action: 'List community opportunities',
 				},
 			],
 			default: 'content',
 		},
-		// Operations for Topics
 		{
 			displayName: 'Operation',
 			name: 'operation',
@@ -177,22 +130,18 @@ export const dagenoApiDescription: INodeTypeDescription = {
 			noDataExpression: true,
 			displayOptions: {
 				show: {
-					resource: [
-						'topics',
-					],
+					resource: ['topics'],
 				},
 			},
 			options: [
 				{
-					name: 'List',
+					name: 'List Topics',
 					value: 'list',
-					description: 'List topics',
 					action: 'List topics',
 				},
 			],
 			default: 'list',
 		},
-		// Operations for Prompts
 		{
 			displayName: 'Operation',
 			name: 'operation',
@@ -200,69 +149,28 @@ export const dagenoApiDescription: INodeTypeDescription = {
 			noDataExpression: true,
 			displayOptions: {
 				show: {
-					resource: [
-						'prompts',
-					],
+					resource: ['prompts'],
 				},
 			},
 			options: [
 				{
-					name: 'List',
+					name: 'List Prompts',
 					value: 'list',
-					description: 'List prompts',
 					action: 'List prompts',
 				},
 				{
 					name: 'List Responses',
 					value: 'listResponses',
-					description: 'List responses by prompt',
-					action: 'List prompt responses',
+					action: 'List responses by prompt',
 				},
 				{
 					name: 'Get Response Detail',
 					value: 'getResponseDetail',
-					description: 'Get response detail by prompt',
-					action: 'Get prompt response detail',
+					action: 'Get response detail by prompt',
 				},
 			],
 			default: 'list',
 		},
-		{
-			displayName: 'Prompt ID',
-			name: 'promptId',
-			type: 'string',
-			required: true,
-			displayOptions: {
-				show: {
-					resource: [
-						'prompts',
-					],
-					operation: [
-						'listResponses',
-						'getResponseDetail',
-					],
-				},
-			},
-			default: '',
-		},
-		{
-			displayName: 'Response ID',
-			name: 'responseId',
-			type: 'string',
-			required: true,
-			displayOptions: {
-				show: {
-					resource: [
-						'prompts',
-					],
-					operation: [
-						'getResponseDetail',
-					],
-				},
-			},
-			default: '',
-		},
-		// Operations for Citations
 		{
 			displayName: 'Operation',
 			name: 'operation',
@@ -270,26 +178,73 @@ export const dagenoApiDescription: INodeTypeDescription = {
 			noDataExpression: true,
 			displayOptions: {
 				show: {
-					resource: [
-						'citations',
-					],
+					resource: ['citations'],
 				},
 			},
 			options: [
 				{
 					name: 'List Domains',
 					value: 'listDomains',
-					description: 'List citation domains',
 					action: 'List citation domains',
 				},
 				{
 					name: 'List URLs',
 					value: 'listUrls',
-					description: 'List citation URLs',
 					action: 'List citation URLs',
+				},
+				{
+					name: 'List Domains by Prompt',
+					value: 'listDomainsByPrompt',
+					action: 'List citation domains by prompt',
+				},
+				{
+					name: 'List URLs by Prompt',
+					value: 'listUrlsByPrompt',
+					action: 'List citation URLs by prompt',
 				},
 			],
 			default: 'listDomains',
+		},
+		// Parameters
+		{
+			displayName: 'Body (JSON)',
+			name: 'body',
+			type: 'json',
+			displayOptions: {
+				show: {
+					resource: ['geoAnalysis'],
+					operation: ['execute'],
+				},
+			},
+			default: '{\n  "target": {\n    "entity": "topic",\n    "metrics": ["visibility", "citation"],\n    "filters": {\n      "dateRange": {\n        "startAt": "2026-03-18T00:00:00.000Z",\n        "endAt": "2026-03-28T00:00:00.000Z"\n      }\n    }\n  },\n  "analysis": {\n    "type": "ranking",\n    "ranking": {\n      "orderBy": "visibility",\n      "direction": "desc"\n    }\n  }\n}',
+			required: true,
+			description: 'The DSL query body for GEO analysis',
+		},
+		{
+			displayName: 'Prompt ID',
+			name: 'promptId',
+			type: 'string',
+			displayOptions: {
+				show: {
+					resource: ['prompts', 'citations'],
+					operation: ['listResponses', 'getResponseDetail', 'listDomainsByPrompt', 'listUrlsByPrompt'],
+				},
+			},
+			default: '',
+			required: true,
+		},
+		{
+			displayName: 'Response ID',
+			name: 'responseId',
+			type: 'string',
+			displayOptions: {
+				show: {
+					resource: ['prompts'],
+					operation: ['getResponseDetail'],
+				},
+			},
+			default: '',
+			required: true,
 		},
 	],
 };

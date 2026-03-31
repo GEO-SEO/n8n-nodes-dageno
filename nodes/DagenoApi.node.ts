@@ -23,7 +23,6 @@ export class DagenoApi implements INodeType {
 		const resource = this.getNodeParameter('resource', 0) as string;
 		const operation = this.getNodeParameter('operation', 0) as string;
 
-		// Explicitly get credentials at the beginning of execution
 		const credentials = await this.getCredentials('dagenoApi');
 
 		for (let i = 0; i < items.length; i++) {
@@ -35,107 +34,64 @@ export class DagenoApi implements INodeType {
 					'Accept': 'application/json',
 				};
 
-				if (resource === 'brand') {
-					if (operation === 'get') {
-						const options = {
-							method: 'GET' as IHttpRequestMethods,
-							url: 'https://api.dageno.ai/business/api/v1/open-api/brand',
-							headers,
-							json: true,
-						};
-						responseData = await this.helpers.httpRequest(options);
-					}
-				} else if (resource === 'geoAnalysis') {
-					if (operation === 'execute') {
-						let body = this.getNodeParameter('body', i) as any;
-						
-						// Handle potential string vs object input from n8n UI
-						if (typeof body === 'string') {
-							try {
-								body = JSON.parse(body);
-							} catch (e) {
-								throw new Error('Invalid JSON format in Body parameter. Please provide a valid JSON object, e.g., {"url": "https://example.com"}');
-							}
-						}
+				let method: IHttpRequestMethods = 'GET';
+				let url = 'https://api.dageno.ai/business/api/v1/open-api';
+				let body: IDataObject | undefined;
 
-						const options = {
-							method: 'POST' as IHttpRequestMethods,
-							url: 'https://api.dageno.ai/business/api/v1/open-api/geo/analysis',
-							headers,
-							body,
-							json: true,
-						};
-						responseData = await this.helpers.httpRequest(options);
+				if (resource === 'brand') {
+					url += '/brand';
+				} else if (resource === 'geoAnalysis') {
+					method = 'POST';
+					url += '/geo/analysis';
+					let bodyInput = this.getNodeParameter('body', i) as any;
+					if (typeof bodyInput === 'string') {
+						try {
+							body = JSON.parse(bodyInput);
+						} catch (e) {
+							throw new Error('Invalid JSON format in Body parameter.');
+						}
+					} else {
+						body = bodyInput;
 					}
 				} else if (resource === 'opportunities') {
-					const type = this.getNodeParameter('type', i) as string;
-					const options = {
-						method: 'GET' as IHttpRequestMethods,
-						url: `https://api.dageno.ai/business/api/v1/open-api/opportunities/${type}`,
-						headers,
-						json: true,
-					};
-					responseData = await this.helpers.httpRequest(options);
+					url += `/opportunities/${operation}`;
 				} else if (resource === 'topics') {
-					if (operation === 'list') {
-						const options = {
-							method: 'GET' as IHttpRequestMethods,
-							url: 'https://api.dageno.ai/business/api/v1/open-api/topics',
-							headers,
-							json: true,
-						};
-						responseData = await this.helpers.httpRequest(options);
-					}
+					url += '/topics';
 				} else if (resource === 'prompts') {
 					if (operation === 'list') {
-						const options = {
-							method: 'GET' as IHttpRequestMethods,
-							url: 'https://api.dageno.ai/business/api/v1/open-api/prompts',
-							headers,
-							json: true,
-						};
-						responseData = await this.helpers.httpRequest(options);
+						url += '/prompts';
 					} else if (operation === 'listResponses') {
 						const promptId = this.getNodeParameter('promptId', i) as string;
-						const options = {
-							method: 'GET' as IHttpRequestMethods,
-							url: `https://api.dageno.ai/business/api/v1/open-api/prompts/${promptId}/responses`,
-							headers,
-							json: true,
-						};
-						responseData = await this.helpers.httpRequest(options);
+						url += `/prompts/${promptId}/responses`;
 					} else if (operation === 'getResponseDetail') {
 						const promptId = this.getNodeParameter('promptId', i) as string;
 						const responseId = this.getNodeParameter('responseId', i) as string;
-						const options = {
-							method: 'GET' as IHttpRequestMethods,
-							url: `https://api.dageno.ai/business/api/v1/open-api/prompts/${promptId}/responses/${responseId}`,
-							headers,
-							json: true,
-						};
-						responseData = await this.helpers.httpRequest(options);
+						url += `/prompts/${promptId}/responses/${responseId}`;
 					}
 				} else if (resource === 'citations') {
 					if (operation === 'listDomains') {
-						const options = {
-							method: 'GET' as IHttpRequestMethods,
-							url: 'https://api.dageno.ai/business/api/v1/open-api/citations/domains',
-							headers,
-							json: true,
-						};
-						responseData = await this.helpers.httpRequest(options);
+						url += '/citations/domains';
 					} else if (operation === 'listUrls') {
-						const options = {
-							method: 'GET' as IHttpRequestMethods,
-							url: 'https://api.dageno.ai/business/api/v1/open-api/citations/urls',
-							headers,
-							json: true,
-						};
-						responseData = await this.helpers.httpRequest(options);
+						url += '/citations/urls';
+					} else if (operation === 'listDomainsByPrompt') {
+						const promptId = this.getNodeParameter('promptId', i) as string;
+						url += `/citations/domains?promptId=${promptId}`;
+					} else if (operation === 'listUrlsByPrompt') {
+						const promptId = this.getNodeParameter('promptId', i) as string;
+						url += `/citations/urls?promptId=${promptId}`;
 					}
 				}
 
-				// Unified response handling based on Dageno API documentation
+				const options = {
+					method,
+					url,
+					headers,
+					body,
+					json: true,
+				};
+
+				responseData = await this.helpers.httpRequest(options);
+
 				if (responseData.error) {
 					throw new Error(`Dageno API Error: ${responseData.message || 'Unknown Error'}`);
 				}
@@ -147,7 +103,6 @@ export class DagenoApi implements INodeType {
 						returnData.push({ json: entry as IDataObject });
 					}
 				} else if (data.items && Array.isArray(data.items)) {
-					// Handle paginated list endpoints that return data.items
 					for (const entry of data.items) {
 						returnData.push({ json: entry as IDataObject });
 					}
