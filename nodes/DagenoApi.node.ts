@@ -43,12 +43,12 @@ export class DagenoApi implements INodeType {
 				} else if (resource === 'geoAnalysis') {
 					method = 'POST';
 					url += '/geo/analysis';
-					let bodyInput = this.getNodeParameter('body', i) as any;
+					const bodyInput = this.getNodeParameter('body', i) as any;
 					if (typeof bodyInput === 'string') {
 						try {
 							body = JSON.parse(bodyInput);
 						} catch (e) {
-							throw new Error('Invalid JSON format in Body parameter.');
+							throw new Error('Invalid JSON format in Body parameter. Please provide a valid JSON object.');
 						}
 					} else {
 						body = bodyInput;
@@ -90,7 +90,17 @@ export class DagenoApi implements INodeType {
 					json: true,
 				};
 
-				responseData = await this.helpers.httpRequest(options);
+				try {
+					responseData = await this.helpers.httpRequest(options);
+				} catch (error) {
+					// Extract detailed error message from Dageno API response if available
+					if (error.response && error.response.data) {
+						const apiError = error.response.data;
+						const message = apiError.message || apiError.error || JSON.stringify(apiError);
+						throw new Error(`Dageno API Error (${error.response.status}): ${message}`);
+					}
+					throw error;
+				}
 
 				if (responseData.error) {
 					throw new Error(`Dageno API Error: ${responseData.message || 'Unknown Error'}`);
