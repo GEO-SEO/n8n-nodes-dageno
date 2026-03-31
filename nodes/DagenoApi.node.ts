@@ -32,6 +32,7 @@ export class DagenoApi implements INodeType {
 				const headers = {
 					'x-api-key': credentials.apiKey as string,
 					'Content-Type': 'application/json',
+					'Accept': 'application/json',
 				};
 
 				if (resource === 'brand') {
@@ -46,12 +47,22 @@ export class DagenoApi implements INodeType {
 					}
 				} else if (resource === 'geoAnalysis') {
 					if (operation === 'execute') {
-						const body = this.getNodeParameter('body', i) as string;
+						let body = this.getNodeParameter('body', i) as any;
+						
+						// Handle potential string vs object input from n8n UI
+						if (typeof body === 'string') {
+							try {
+								body = JSON.parse(body);
+							} catch (e) {
+								throw new Error('Invalid JSON format in Body parameter.');
+							}
+						}
+
 						const options = {
 							method: 'POST' as IHttpRequestMethods,
 							url: 'https://api.dageno.ai/business/api/v1/open-api/geo/analysis',
 							headers,
-							body: JSON.parse(body),
+							body,
 							json: true,
 						};
 						responseData = await this.helpers.httpRequest(options);
