@@ -54,7 +54,7 @@ export class DagenoApi implements INodeType {
 							try {
 								body = JSON.parse(body);
 							} catch (e) {
-								throw new Error('Invalid JSON format in Body parameter.');
+								throw new Error('Invalid JSON format in Body parameter. Please provide a valid JSON object, e.g., {"url": "https://example.com"}');
 							}
 						}
 
@@ -135,12 +135,24 @@ export class DagenoApi implements INodeType {
 					}
 				}
 
-				if (Array.isArray(responseData)) {
-					for (const data of responseData) {
-						returnData.push({ json: data });
+				// Unified response handling based on Dageno API documentation
+				if (responseData.error) {
+					throw new Error(`Dageno API Error: ${responseData.message || 'Unknown Error'}`);
+				}
+
+				const data = responseData.data || responseData;
+
+				if (Array.isArray(data)) {
+					for (const entry of data) {
+						returnData.push({ json: entry as IDataObject });
+					}
+				} else if (data.items && Array.isArray(data.items)) {
+					// Handle paginated list endpoints that return data.items
+					for (const entry of data.items) {
+						returnData.push({ json: entry as IDataObject });
 					}
 				} else {
-					returnData.push({ json: responseData as IDataObject });
+					returnData.push({ json: data as IDataObject });
 				}
 			} catch (error) {
 				if (this.continueOnFail()) {
