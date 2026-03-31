@@ -1,0 +1,47 @@
+{
+  "name": "n8n-nodes-dageno-ai",
+  "version": "1.0.1",
+  "description": "n8n node for Dageno API",
+  "keywords": [
+    "n8n-community-node-package",
+    "dageno",
+    "geo-analysis",
+    "seo",
+    "api"
+  ],
+  "license": "MIT",
+  "author": {
+    "name": "Dageno AI",
+    "email": "tim@dageno.ai"
+  },
+  "homepage": "https://github.com/GEO-SEO/n8n-nodes-dageno",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GEO-SEO/n8n-nodes-dageno.git"
+  },
+  "main": "dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "devDependencies": {
+    "n8n-core": "^1.122.18",
+    "n8n-workflow": "^2.13.1",
+    "typescript": "^5.0.0"
+  },
+  "n8n": {
+    "n8nNodesApiVersion": 1,
+    "credentials": [
+      "dist/credentials/DagenoApi.credentials.js"
+    ],
+    "nodes": [
+      "dist/nodes/DagenoApi.node.js"
+    ]
+  }
+}
