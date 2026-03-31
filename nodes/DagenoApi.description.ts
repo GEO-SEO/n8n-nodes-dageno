@@ -216,7 +216,7 @@ export const dagenoApiDescription: INodeTypeDescription = {
 					operation: ['execute'],
 				},
 			},
-			default: '{\n  "target": {\n    "entity": "topic",\n    "metrics": ["visibility", "citation"],\n    "filters": {\n      "dateRange": {\n        "startAt": "2026-03-18T00:00:00.000Z",\n        "endAt": "2026-03-28T00:00:00.000Z"\n      }\n    }\n  },\n  "analysis": {\n    "type": "ranking",\n    "ranking": {\n      "orderBy": "visibility",\n      "direction": "desc"\n    }\n  }\n}',
+			default: '{\n  "target": {\n    "entity": "topic",\n    "metrics": ["visibility", "citation"],\n    "filters": {\n      "dateRange": {\n        "startAt": "2026-03-18T00:00:00.000Z",\n        "endAt": "2026-03-28T00:00:00.000Z"\n      }\n    }\n  },\n  "analysis": {\n    "type": "ranking",\n    "ranking": {\n      "orderBy": "visibility",\n      "direction": "DESC"\n    }\n  }\n}',
 			required: true,
 			description: 'The DSL query body for GEO analysis',
 		},
