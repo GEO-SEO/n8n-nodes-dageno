@@ -246,5 +246,54 @@ export const dagenoApiDescription: INodeTypeDescription = {
 			default: '',
 			required: true,
 		},
+		// Pagination and Filters (Added for GET requests based on 400 error)
+		{
+			displayName: 'Page',
+			name: 'page',
+			type: 'number',
+			displayOptions: {
+				show: {
+					resource: ['opportunities', 'topics', 'prompts', 'citations'],
+				},
+			},
+			default: 1,
+			description: 'The page number to retrieve',
+		},
+		{
+			displayName: 'Page Size',
+			name: 'pageSize',
+			type: 'number',
+			displayOptions: {
+				show: {
+					resource: ['opportunities', 'topics', 'prompts', 'citations'],
+				},
+			},
+			default: 20,
+			description: 'The number of results per page',
+		},
+		{
+			displayName: 'Start Date',
+			name: 'startAt',
+			type: 'dateTime',
+			displayOptions: {
+				show: {
+					resource: ['opportunities', 'topics', 'prompts', 'citations'],
+				},
+			},
+			default: '={{new Date(new Date().setDate(new Date().getDate() - 30)).toISOString()}}',
+			description: 'Filter results starting from this date',
+		},
+		{
+			displayName: 'End Date',
+			name: 'endAt',
+			type: 'dateTime',
+			displayOptions: {
+				show: {
+					resource: ['opportunities', 'topics', 'prompts', 'citations'],
+				},
+			},
+			default: '={{new Date().toISOString()}}',
+			description: 'Filter results ending at this date',
+		},
 	],
 };

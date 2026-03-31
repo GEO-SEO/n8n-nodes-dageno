@@ -37,6 +37,15 @@ export class DagenoApi implements INodeType {
 				let method: IHttpRequestMethods = 'GET';
 				let url = 'https://api.dageno.ai/business/api/v1/open-api';
 				let body: IDataObject | undefined;
+				const qs: IDataObject = {};
+
+				// Helper to add pagination and filters to query string for list endpoints
+				const addListParams = () => {
+					qs.page = this.getNodeParameter('page', i) as number;
+					qs.pageSize = this.getNodeParameter('pageSize', i) as number;
+					qs.startAt = this.getNodeParameter('startAt', i) as string;
+					qs.endAt = this.getNodeParameter('endAt', i) as string;
+				};
 
 				if (resource === 'brand') {
 					url += '/brand';
@@ -55,14 +64,18 @@ export class DagenoApi implements INodeType {
 					}
 				} else if (resource === 'opportunities') {
 					url += `/opportunities/${operation}`;
+					addListParams();
 				} else if (resource === 'topics') {
 					url += '/topics';
+					addListParams();
 				} else if (resource === 'prompts') {
 					if (operation === 'list') {
 						url += '/prompts';
+						addListParams();
 					} else if (operation === 'listResponses') {
 						const promptId = this.getNodeParameter('promptId', i) as string;
 						url += `/prompts/${promptId}/responses`;
+						addListParams();
 					} else if (operation === 'getResponseDetail') {
 						const promptId = this.getNodeParameter('promptId', i) as string;
 						const responseId = this.getNodeParameter('responseId', i) as string;
@@ -71,14 +84,20 @@ export class DagenoApi implements INodeType {
 				} else if (resource === 'citations') {
 					if (operation === 'listDomains') {
 						url += '/citations/domains';
+						addListParams();
 					} else if (operation === 'listUrls') {
 						url += '/citations/urls';
+						addListParams();
 					} else if (operation === 'listDomainsByPrompt') {
 						const promptId = this.getNodeParameter('promptId', i) as string;
-						url += `/citations/domains?promptId=${promptId}`;
+						url += `/citations/domains`;
+						qs.promptId = promptId;
+						addListParams();
 					} else if (operation === 'listUrlsByPrompt') {
 						const promptId = this.getNodeParameter('promptId', i) as string;
-						url += `/citations/urls?promptId=${promptId}`;
+						url += `/citations/urls`;
+						qs.promptId = promptId;
+						addListParams();
 					}
 				}
 
@@ -86,6 +105,7 @@ export class DagenoApi implements INodeType {
 					method,
 					url,
 					headers,
+					qs,
 					body,
 					json: true,
 				};
@@ -93,7 +113,6 @@ export class DagenoApi implements INodeType {
 				try {
 					responseData = await this.helpers.httpRequest(options);
 				} catch (error) {
-					// Extract detailed error message from Dageno API response if available
 					if (error.response && error.response.data) {
 						const apiError = error.response.data;
 						const message = apiError.message || apiError.error || JSON.stringify(apiError);
