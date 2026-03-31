@@ -23,17 +23,26 @@ export class DagenoApi implements INodeType {
 		const resource = this.getNodeParameter('resource', 0) as string;
 		const operation = this.getNodeParameter('operation', 0) as string;
 
+		// Explicitly get credentials at the beginning of execution
+		const credentials = await this.getCredentials('dagenoApi');
+
 		for (let i = 0; i < items.length; i++) {
 			try {
 				let responseData;
+				const headers = {
+					'x-api-key': credentials.apiKey as string,
+					'Content-Type': 'application/json',
+				};
 
 				if (resource === 'brand') {
 					if (operation === 'get') {
 						const options = {
 							method: 'GET' as IHttpRequestMethods,
 							url: 'https://api.dageno.ai/business/api/v1/open-api/brand',
+							headers,
+							json: true,
 						};
-						responseData = await this.helpers.httpRequestWithAuthentication.call(this, 'dagenoApi', options);
+						responseData = await this.helpers.httpRequest(options);
 					}
 				} else if (resource === 'geoAnalysis') {
 					if (operation === 'execute') {
@@ -41,61 +50,77 @@ export class DagenoApi implements INodeType {
 						const options = {
 							method: 'POST' as IHttpRequestMethods,
 							url: 'https://api.dageno.ai/business/api/v1/open-api/geo/analysis',
+							headers,
 							body: JSON.parse(body),
+							json: true,
 						};
-						responseData = await this.helpers.httpRequestWithAuthentication.call(this, 'dagenoApi', options);
+						responseData = await this.helpers.httpRequest(options);
 					}
 				} else if (resource === 'opportunities') {
 					const type = this.getNodeParameter('type', i) as string;
 					const options = {
 						method: 'GET' as IHttpRequestMethods,
 						url: `https://api.dageno.ai/business/api/v1/open-api/opportunities/${type}`,
+						headers,
+						json: true,
 					};
-					responseData = await this.helpers.httpRequestWithAuthentication.call(this, 'dagenoApi', options);
+					responseData = await this.helpers.httpRequest(options);
 				} else if (resource === 'topics') {
 					if (operation === 'list') {
 						const options = {
 							method: 'GET' as IHttpRequestMethods,
 							url: 'https://api.dageno.ai/business/api/v1/open-api/topics',
+							headers,
+							json: true,
 						};
-						responseData = await this.helpers.httpRequestWithAuthentication.call(this, 'dagenoApi', options);
+						responseData = await this.helpers.httpRequest(options);
 					}
 				} else if (resource === 'prompts') {
 					if (operation === 'list') {
 						const options = {
 							method: 'GET' as IHttpRequestMethods,
 							url: 'https://api.dageno.ai/business/api/v1/open-api/prompts',
+							headers,
+							json: true,
 						};
-						responseData = await this.helpers.httpRequestWithAuthentication.call(this, 'dagenoApi', options);
+						responseData = await this.helpers.httpRequest(options);
 					} else if (operation === 'listResponses') {
 						const promptId = this.getNodeParameter('promptId', i) as string;
 						const options = {
 							method: 'GET' as IHttpRequestMethods,
 							url: `https://api.dageno.ai/business/api/v1/open-api/prompts/${promptId}/responses`,
+							headers,
+							json: true,
 						};
-						responseData = await this.helpers.httpRequestWithAuthentication.call(this, 'dagenoApi', options);
+						responseData = await this.helpers.httpRequest(options);
 					} else if (operation === 'getResponseDetail') {
 						const promptId = this.getNodeParameter('promptId', i) as string;
 						const responseId = this.getNodeParameter('responseId', i) as string;
 						const options = {
 							method: 'GET' as IHttpRequestMethods,
 							url: `https://api.dageno.ai/business/api/v1/open-api/prompts/${promptId}/responses/${responseId}`,
+							headers,
+							json: true,
 						};
-						responseData = await this.helpers.httpRequestWithAuthentication.call(this, 'dagenoApi', options);
+						responseData = await this.helpers.httpRequest(options);
 					}
 				} else if (resource === 'citations') {
 					if (operation === 'listDomains') {
 						const options = {
 							method: 'GET' as IHttpRequestMethods,
 							url: 'https://api.dageno.ai/business/api/v1/open-api/citations/domains',
+							headers,
+							json: true,
 						};
-						responseData = await this.helpers.httpRequestWithAuthentication.call(this, 'dagenoApi', options);
+						responseData = await this.helpers.httpRequest(options);
 					} else if (operation === 'listUrls') {
 						const options = {
 							method: 'GET' as IHttpRequestMethods,
 							url: 'https://api.dageno.ai/business/api/v1/open-api/citations/urls',
+							headers,
+							json: true,
 						};
-						responseData = await this.helpers.httpRequestWithAuthentication.call(this, 'dagenoApi', options);
+						responseData = await this.helpers.httpRequest(options);
 					}
 				}
 
