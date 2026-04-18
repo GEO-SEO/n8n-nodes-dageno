@@ -1,13 +1,15 @@
 import {
+	IAuthenticateGeneric,
 	ICredentialType,
-	INodeProperties,
 	ICredentialTestRequest,
+	INodeProperties,
 } from 'n8n-workflow';
 
 export class DagenoApi implements ICredentialType {
 	name = 'dagenoApi';
 	displayName = 'Dageno API';
 	documentationUrl = 'https://open-api-docs.dageno.ai/';
+	icon = 'file:dageno.svg';
 	properties: INodeProperties[] = [
 		{
 			displayName: 'API Key',
@@ -21,13 +23,14 @@ export class DagenoApi implements ICredentialType {
 		},
 	];
 
-	// Standard authentication method for n8n
-	authenticate = {
-		header: {
-			name: 'x-api-key',
-			value: '={{$credentials.apiKey}}',
+	authenticate: IAuthenticateGeneric = {
+		type: 'generic',
+		properties: {
+			headers: {
+				'x-api-key': '={{$credentials.apiKey}}',
+			},
 		},
-	} as any;
+	};
 
 	// The test method used by n8n to verify if the credentials are valid
 	test: ICredentialTestRequest = {

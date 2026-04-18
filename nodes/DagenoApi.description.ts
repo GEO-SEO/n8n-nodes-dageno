@@ -1,5 +1,6 @@
 import {
 	INodeTypeDescription,
+	NodeConnectionTypes,
 } from 'n8n-workflow';
 
 export const dagenoApiDescription: INodeTypeDescription = {
@@ -13,8 +14,8 @@ export const dagenoApiDescription: INodeTypeDescription = {
 	defaults: {
 		name: 'Dageno API',
 	},
-	inputs: ['main'],
-	outputs: ['main'],
+	inputs: [NodeConnectionTypes.Main],
+	outputs: [NodeConnectionTypes.Main],
 	credentials: [
 		{
 			name: 'dagenoApi',
@@ -33,24 +34,24 @@ export const dagenoApiDescription: INodeTypeDescription = {
 					value: 'brand',
 				},
 				{
+					name: 'Citation',
+					value: 'citation',
+				},
+				{
 					name: 'GEO Analysis',
 					value: 'geoAnalysis',
 				},
 				{
-					name: 'Opportunities',
-					value: 'opportunities',
+					name: 'Opportunity',
+					value: 'opportunity',
 				},
 				{
-					name: 'Topics',
-					value: 'topics',
+					name: 'Prompt',
+					value: 'prompt',
 				},
 				{
-					name: 'Prompts',
-					value: 'prompts',
-				},
-				{
-					name: 'Citations',
-					value: 'citations',
+					name: 'Topic',
+					value: 'topic',
 				},
 			],
 			default: 'brand',
@@ -101,24 +102,24 @@ export const dagenoApiDescription: INodeTypeDescription = {
 			noDataExpression: true,
 			displayOptions: {
 				show: {
-					resource: ['opportunities'],
+					resource: ['opportunity'],
 				},
 			},
 			options: [
 				{
-					name: 'List Content Opportunities',
+					name: 'List Content Opportunity',
 					value: 'content',
-					action: 'List content opportunities',
+					action: 'List content opportunity',
 				},
 				{
-					name: 'List Backlink Opportunities',
+					name: 'List Backlink Opportunity',
 					value: 'backlink',
-					action: 'List backlink opportunities',
+					action: 'List backlink opportunity',
 				},
 				{
-					name: 'List Community Opportunities',
+					name: 'List Community Opportunity',
 					value: 'community',
-					action: 'List community opportunities',
+					action: 'List community opportunity',
 				},
 			],
 			default: 'content',
@@ -130,14 +131,14 @@ export const dagenoApiDescription: INodeTypeDescription = {
 			noDataExpression: true,
 			displayOptions: {
 				show: {
-					resource: ['topics'],
+					resource: ['topic'],
 				},
 			},
 			options: [
 				{
-					name: 'List Topics',
+					name: 'List Topic',
 					value: 'list',
-					action: 'List topics',
+					action: 'List topic',
 				},
 			],
 			default: 'list',
@@ -149,19 +150,19 @@ export const dagenoApiDescription: INodeTypeDescription = {
 			noDataExpression: true,
 			displayOptions: {
 				show: {
-					resource: ['prompts'],
+					resource: ['prompt'],
 				},
 			},
 			options: [
 				{
-					name: 'List Prompts',
+					name: 'List Prompt',
 					value: 'list',
-					action: 'List prompts',
+					action: 'List prompt',
 				},
 				{
-					name: 'List Responses',
+					name: 'List Prompt Response',
 					value: 'listResponses',
-					action: 'List responses by prompt',
+					action: 'List prompt response',
 				},
 				{
 					name: 'Get Response Detail',
@@ -178,7 +179,7 @@ export const dagenoApiDescription: INodeTypeDescription = {
 			noDataExpression: true,
 			displayOptions: {
 				show: {
-					resource: ['citations'],
+					resource: ['citation'],
 				},
 			},
 			options: [
@@ -226,7 +227,7 @@ export const dagenoApiDescription: INodeTypeDescription = {
 			type: 'string',
 			displayOptions: {
 				show: {
-					resource: ['prompts', 'citations'],
+					resource: ['prompt', 'citation'],
 					operation: ['listResponses', 'getResponseDetail', 'listDomainsByPrompt', 'listUrlsByPrompt'],
 				},
 			},
@@ -239,7 +240,7 @@ export const dagenoApiDescription: INodeTypeDescription = {
 			type: 'string',
 			displayOptions: {
 				show: {
-					resource: ['prompts'],
+					resource: ['prompt'],
 					operation: ['getResponseDetail'],
 				},
 			},
@@ -253,7 +254,7 @@ export const dagenoApiDescription: INodeTypeDescription = {
 			type: 'number',
 			displayOptions: {
 				show: {
-					resource: ['opportunities', 'topics', 'prompts', 'citations'],
+					resource: ['opportunity', 'topic', 'prompt', 'citation'],
 				},
 			},
 			default: 1,
@@ -265,7 +266,7 @@ export const dagenoApiDescription: INodeTypeDescription = {
 			type: 'number',
 			displayOptions: {
 				show: {
-					resource: ['opportunities', 'topics', 'prompts', 'citations'],
+					resource: ['opportunity', 'topic', 'prompt', 'citation'],
 				},
 			},
 			default: 20,
@@ -277,7 +278,7 @@ export const dagenoApiDescription: INodeTypeDescription = {
 			type: 'dateTime',
 			displayOptions: {
 				show: {
-					resource: ['opportunities', 'topics', 'prompts', 'citations'],
+					resource: ['opportunity', 'topic', 'prompt', 'citation'],
 				},
 			},
 			default: '={{new Date(new Date().setDate(new Date().getDate() - 30)).toISOString()}}',
@@ -289,7 +290,7 @@ export const dagenoApiDescription: INodeTypeDescription = {
 			type: 'dateTime',
 			displayOptions: {
 				show: {
-					resource: ['opportunities', 'topics', 'prompts', 'citations'],
+					resource: ['opportunity', 'topic', 'prompt', 'citation'],
 				},
 			},
 			default: '={{new Date().toISOString()}}',

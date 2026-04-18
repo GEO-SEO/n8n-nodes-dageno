@@ -1,0 +1,21 @@
+{
+  "node": "n8n-nodes-dageno-ai.dagenoApi",
+  "nodeVersion": "1.0",
+  "codexVersion": "1.0",
+  "categories": [
+    "Marketing & Content",
+    "Utility"
+  ],
+  "resources": {
+    "primaryDocumentation": [
+      {
+        "url": "https://open-api-docs.dageno.ai/"
+      }
+    ],
+    "credentialDocumentation": [
+      {
+        "url": "https://open-api-docs.dageno.ai/"
+      }
+    ]
+  }
+}

@@ -1,13 +1,12 @@
 import {
-	IExecuteFunctions,
-} from 'n8n-workflow';
-
-import {
 	IDataObject,
+	IExecuteFunctions,
+	IHttpRequestMethods,
 	INodeExecutionData,
 	INodeType,
 	INodeTypeDescription,
-	IHttpRequestMethods,
+	JsonObject,
+	NodeApiError,
 } from 'n8n-workflow';
 
 import {
@@ -23,15 +22,12 @@ export class DagenoApi implements INodeType {
 		const resource = this.getNodeParameter('resource', 0) as string;
 		const operation = this.getNodeParameter('operation', 0) as string;
 
-		const credentials = await this.getCredentials('dagenoApi');
-
 		for (let i = 0; i < items.length; i++) {
 			try {
 				let responseData;
 				const headers = {
-					'x-api-key': credentials.apiKey as string,
+					Accept: 'application/json',
 					'Content-Type': 'application/json',
-					'Accept': 'application/json',
 				};
 
 				let method: IHttpRequestMethods = 'GET';
@@ -52,23 +48,25 @@ export class DagenoApi implements INodeType {
 				} else if (resource === 'geoAnalysis') {
 					method = 'POST';
 					url += '/geo/analysis';
-					const bodyInput = this.getNodeParameter('body', i) as any;
+					const bodyInput = this.getNodeParameter('body', i) as string | IDataObject;
 					if (typeof bodyInput === 'string') {
 						try {
 							body = JSON.parse(bodyInput);
 						} catch (e) {
-							throw new Error('Invalid JSON format in Body parameter. Please provide a valid JSON object.');
+							throw new NodeApiError(this.getNode(), {
+								message: 'Invalid JSON format in Body parameter. Please provide a valid JSON object.',
+							} as JsonObject);
 						}
 					} else {
 						body = bodyInput;
 					}
-				} else if (resource === 'opportunities') {
+				} else if (resource === 'opportunity') {
 					url += `/opportunities/${operation}`;
 					addListParams();
-				} else if (resource === 'topics') {
+				} else if (resource === 'topic') {
 					url += '/topics';
 					addListParams();
-				} else if (resource === 'prompts') {
+				} else if (resource === 'prompt') {
 					if (operation === 'list') {
 						url += '/prompts';
 						addListParams();
@@ -81,7 +79,7 @@ export class DagenoApi implements INodeType {
 						const responseId = this.getNodeParameter('responseId', i) as string;
 						url += `/prompts/${promptId}/responses/${responseId}`;
 					}
-				} else if (resource === 'citations') {
+				} else if (resource === 'citation') {
 					if (operation === 'listDomains') {
 						url += '/citations/domains';
 						addListParams();
@@ -111,18 +109,13 @@ export class DagenoApi implements INodeType {
 				};
 
 				try {
-					responseData = await this.helpers.httpRequest(options);
+					responseData = await this.helpers.httpRequestWithAuthentication('dagenoApi', options);
 				} catch (error) {
-					if (error.response && error.response.data) {
-						const apiError = error.response.data;
-						const message = apiError.message || apiError.error || JSON.stringify(apiError);
-						throw new Error(`Dageno API Error (${error.response.status}): ${message}`);
-					}
-					throw error;
+					throw new NodeApiError(this.getNode(), error as JsonObject);
 				}
 
 				if (responseData.error) {
-					throw new Error(`Dageno API Error: ${responseData.message || 'Unknown Error'}`);
+					throw new NodeApiError(this.getNode(), responseData as JsonObject);
 				}
 
 				const data = responseData.data || responseData;
@@ -140,7 +133,8 @@ export class DagenoApi implements INodeType {
 				}
 			} catch (error) {
 				if (this.continueOnFail()) {
-					returnData.push({ json: { error: error.message } });
+					const message = error instanceof Error ? error.message : 'Unknown error';
+					returnData.push({ json: { error: message } });
 					continue;
 				}
 				throw error;

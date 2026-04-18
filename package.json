@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-dageno-ai",
-  "version": "1.1.5",
+  "version": "1.2.8",
   "description": "n8n node for Dageno API",
   "keywords": [
     "n8n-community-node-package",
@@ -14,10 +14,10 @@
     "name": "Dageno AI",
     "email": "tim@dageno.ai"
   },
-  "homepage": "https://github.com/GEO-SEO/n8n-nodes-dageno",
+  "homepage": "https://github.com/dageno-agents/n8n-nodes-dageno",
   "repository": {
     "type": "git",
-    "url": "https://github.com/GEO-SEO/n8n-nodes-dageno.git"
+    "url": "https://github.com/dageno-agents/n8n-nodes-dageno.git"
   },
   "main": "dist/index.js",
   "files": [
@@ -27,7 +27,8 @@
     "node": ">=18"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && npm run copy-assets",
+    "copy-assets": "mkdir -p dist/nodes dist/credentials && cp nodes/DagenoApi.node.json nodes/dageno.svg dist/nodes/ && cp credentials/dageno.svg dist/credentials/",
     "prepublishOnly": "npm run build"
   },
   "devDependencies": {

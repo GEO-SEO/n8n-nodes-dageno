@@ -1,4 +1,4 @@
-# n8n-nodes-dageno
+# n8n-nodes-dageno-ai
 
 This is an n8n community node to interact with the [Dageno Open API](https://open-api-docs.dageno.ai/).
 
@@ -18,8 +18,14 @@ To install this node in your n8n instance:
 
 1. Go to **Settings > Community Nodes**.
 2. Click **Install a community node**.
-3. Enter `n8n-nodes-dageno` as the package name.
+3. Enter `n8n-nodes-dageno-ai` as the package name.
 4. Click **Install**.
+
+## Release Process
+
+1. Bump `package.json` version to the next published version.
+2. Create a matching Git tag in GitHub (for example `v1.2.7`).
+3. Publish through the GitHub Actions workflow with npm provenance enabled.
 
 ## Credentials
 
