@@ -25,79 +25,43 @@ Explore all repos / 查看全部项目: [github.com/dageno-agents](https://githu
 
 <!-- DAGENO_AGENT_NAV_END -->
 
-# n8n-nodes-dageno-ai
+# n8n-nodes-dageno 中文说明
 
-This is an n8n community node to interact with the [Dageno Open API](https://open-api-docs.dageno.ai/).
+> 把 Dageno Open API 接进 n8n 自动化流程的 community node。
 
-[Dageno](https://dageno.ai/) is a GEO (Generative Engine Optimization) analysis tool that helps you understand how AI search engines perceive your brand and identify opportunities for optimization.
+## 它解决什么问题
 
-## Features
+- 如果团队已经在 n8n 里做自动化，就不应该每次手写脚本调用 Dageno。
+- 这个节点让你在 workflow 里直接调用品牌、GEO 分析、关键词、机会、Topic、Prompt、SEO 和引用数据。
 
-- **Brand**: Get basic information about your brand.
-- **GEO Analysis**: Execute complex GEO analysis queries to see how AI engines respond to your brand.
-- **Keyword**: Get keyword volume, CPC, competition, and trend data.
-- **Opportunities**: Discover content, backlink, and community opportunities.
-- **SEO**: Get traffic and ranking data for a domain.
-- **Topics & Prompts**: List and manage topics and prompts used in your analysis, including batch prompt operations.
-- **Citations**: Track citation domains and URLs across AI search engine responses.
+## 什么时候用它
 
-## Installation
+- 你想把 Dageno 数据接到自动报告、监控、告警或内容生产流程里。
+- 你熟悉 n8n，希望用可视化 workflow 串联 API。
+- 你需要批量管理 Topics 和 Prompts。
 
-To install this node in your n8n instance:
+## 和相邻项目有什么区别
 
-1. Go to **Settings > Community Nodes**.
-2. Click **Install a community node**.
-3. Enter `n8n-nodes-dageno-ai` as the package name.
-4. Click **Install**.
+- 它是“自动化连接器”。
+- `dageno-mcp-growth-playbook` 是 API/MCP 的解释和示例。
+- 其他内容/审计仓库是业务工作流，不是 n8n node。
 
-## Release Process
+## 主要输出
 
-1. Bump `package.json` version to the next published version.
-2. Create a matching Git tag in GitHub (for example `v1.2.7`).
-3. Publish through the GitHub Actions workflow with npm provenance enabled.
+- n8n community node
+- Dageno credentials
+- Brand/GEO/Keyword/Opportunity/Topic/Prompt/SEO/Citation operations
 
-## Credentials
+## 快速开始
 
-To use this node, you need a Dageno API Key. You can obtain it from your Dageno dashboard.
+1. 在 n8n 的 Community Nodes 里安装 `n8n-nodes-dageno-ai`。
+2. 配置 Dageno Open API credentials。
+3. 在 workflow 中选择需要的 resource 和 operation。
 
-1. Create a new credential in n8n.
-2. Select **Dageno API**.
-3. Enter your `x-api-key`.
+## 给中文读者的说明
 
-## Resources & Operations
-
-### Brand
-- **Get**: Retrieve basic brand information.
-
-### GEO Analysis
-- **Execute**: Run a GEO analysis query by providing a JSON body.
-
-### Keyword
-- **Get Keyword Volume**: Retrieve volume, CPC, competition, and trend data for keywords.
-
-### Opportunities
-- **List**: Retrieve opportunities for Content, Backlinks, or Community.
-
-### Topics
-- **List**: Get a list of all topics.
-
-### Prompts
-- **List**: Get a list of all prompts.
-- **List Responses**: Get responses for a specific prompt.
-- **Get Response Detail**: Get detailed information for a specific response.
-- **List Query Fanout**: Get query fanout data for a specific prompt.
-- **Batch Create**: Create prompts in bulk.
-- **Batch Delete**: Delete prompts in bulk.
-- **Batch Get**: Retrieve prompts in bulk.
-- **Batch Update**: Update prompts in bulk.
-
-### SEO
-- **Get Traffic Data**: Retrieve SEO traffic, rank, country, source, and keyword data for a domain.
-
-### Citations
-- **List Domains**: Get a list of citation domains.
-- **List URLs**: Get a list of citation URLs.
+这是当前公开仓库的中文本地化入口。英文 README.md 仍然保留更完整的原始说明、命令细节和历史上下文；中文版本优先帮助国内用户快速理解这个项目是做什么的、什么时候该用、以及它和其他 Dageno Agent 项目的区别。
 
 ## License
 
-[MIT](LICENSE)
+请参考英文 README 和仓库内的 LICENSE 文件。
